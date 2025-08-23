@@ -20,7 +20,7 @@ jobs:
       run: |
         pwd
         ls -la
-        cat provider.tf backend.tf main.tf variable.tf
+        cat provider.tf backend.tf main.tf variable.tf || echo "One or more files not found"
 
     - name: Print Environment Variables
       run: |
