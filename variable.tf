@@ -5,7 +5,7 @@ variable "second_rg_name" {
 
 variable "second_storage_name" {
   description = "Name of the second storage account"
-  default     = "secondstorage1620sri"  # Must be unique, lowercase
+  default     = "secondstorage1620sri2"  # Changed to a new unique name
 }
 
 variable "second_container_name" {
