@@ -17,3 +17,4 @@ resource "azurerm_storage_container" "second_container" {
   storage_account_name  = azurerm_storage_account.second_storage.name
   container_access_type = "private"
 }
+ 
