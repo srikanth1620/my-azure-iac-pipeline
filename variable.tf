@@ -5,7 +5,7 @@ variable "second_rg_name" {
 
 variable "second_storage_name" {
   description = "Name of the second storage account"
-  default     = "secondstorage1620sri2"  # Changed to a new unique name
+  default     = "secondstorage1620sri"
 }
 
 variable "second_container_name" {
@@ -16,4 +16,24 @@ variable "second_container_name" {
 variable "location" {
   description = "Azure region"
   default     = "eastus"
+}
+
+variable "key_vault_name" {
+  description = "Name of the Key Vault"
+  default     = "cmkvault1620sri"
+}
+
+variable "cmk_storage_name" {
+  description = "Name of the CMK storage account"
+  default     = "cmkstorage1620sri"
+}
+
+variable "cmk_container_name" {
+  description = "Name of the CMK Blob container"
+  default     = "cmk-container"
+}
+
+variable "tenant_id" {
+  description = "Azure tenant ID"
+  default     = "550420cd-a4f2-4642-941d-ec8d931bcceb"
 }
