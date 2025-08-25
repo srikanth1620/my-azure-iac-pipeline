@@ -27,7 +27,7 @@
     account_tier             = "Standard"
     account_replication_type = "LRS"
     encryption {
-      key_source = "None"  # Invalid value to trigger policy denial
+      key_source = "Microsoft.storage"  # Invalid value to trigger policy denial
     }
   }
 
