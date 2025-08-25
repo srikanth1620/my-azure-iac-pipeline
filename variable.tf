@@ -1,34 +1,39 @@
-     variable "second_rg_name" {
-       description = "Name of the second resource group"
-       default     = "second-storage-rg"
-     }
+variable "second_rg_name" {
+  description = "Name of the second resource group"
+  default     = "second-storage-rg"
+}
 
-     variable "location" {
-       description = "Azure region"
-       default     = "eastus"
-     }
+variable "second_storage_name" {
+  description = "Name of the second storage account"
+  default     = "secondstorage1620sri"
+}
 
-     variable "tenant_id" {
-       description = "Azure tenant ID"
-       default     = "550420cd-a4f2-4642-941d-ec8d931bcceb"
-     }
+variable "second_container_name" {
+  description = "Name of the second Blob container"
+  default     = "second-container"
+}
 
-     variable "msft_test_storage_name" {
-       description = "Name of the Microsoft-managed test storage account"
-       default     = "msftteststorage1620sri"
-     }
+variable "location" {
+  description = "Azure region"
+  default     = "eastus"
+}
 
-     variable "msft_test_container_name" {
-       description = "Name of the Microsoft-managed test Blob container"
-       default     = "msft-test-container"
-     }
+variable "key_vault_name" {
+  description = "Name of the Key Vault"
+  default     = "cmkvault1620sri"
+}
 
-     variable "policy_test_storage_name" {
-       description = "Name of the policy test storage account"
-       default     = "policyteststorage1620sri"
-     }
+variable "cmk_storage_name" {
+  description = "Name of the CMK storage account"
+  default     = "cmkstorage1620sri"
+}
 
-     variable "policy_test_container_name" {
-       description = "Name of the policy test Blob container"
-       default     = "policy-test-container"
-     }
+variable "cmk_container_name" {
+  description = "Name of the CMK Blob container"
+  default     = "cmk-container"
+}
+
+variable "tenant_id" {
+  description = "Azure tenant ID"
+  default     = "550420cd-a4f2-4642-941d-ec8d931bcceb"
+}
