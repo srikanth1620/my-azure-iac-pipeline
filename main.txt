@@ -1,4 +1,5 @@
 # backup main.tf 
+# added another one
 
 resource "azurerm_resource_group" "second_rg" {
   name     = var.second_rg_name
