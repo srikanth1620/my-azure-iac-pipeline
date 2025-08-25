@@ -26,9 +26,6 @@
     location                 = azurerm_resource_group.second_rg.location
     account_tier             = "Standard"
     account_replication_type = "LRS"
-    encryption {
-      key_source = "Microsoft.storage"  # Invalid value to trigger policy denial
-    }
   }
 
   resource "azurerm_storage_container" "test_container" {
