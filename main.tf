@@ -1,4 +1,4 @@
-```terraform
+
   resource "azurerm_resource_group" "second_rg" {
     name     = var.second_rg_name
     location = var.location
@@ -36,4 +36,3 @@
     storage_account_name  = azurerm_storage_account.test_storage.name
     container_access_type = "private"
   }
-  ```
