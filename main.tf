@@ -18,7 +18,7 @@
        container_access_type = "private"
      }
 
-     # Test storage account (simulate non-compliance with a tag)
+     # First test storage account (simulate non-compliance with a tag)
      resource "azurerm_storage_account" "test_storage" {
        name                     = var.test_storage_name
        resource_group_name      = azurerm_resource_group.second_rg.name
@@ -36,7 +36,7 @@
        container_access_type = "private"
      }
 
-     # New test storage account (simulate non-compliance with a tag)
+     # Second test storage account (simulate non-compliance with a tag)
      resource "azurerm_storage_account" "new_test_storage" {
        name                     = var.new_test_storage_name
        resource_group_name      = azurerm_resource_group.second_rg.name
@@ -44,12 +44,30 @@
        account_tier             = "Standard"
        account_replication_type = "LRS"
        tags = {
-         EncryptionTest = "NonCompliant"  # Tag to trigger policy denial
+         EncryptionTest = "NonCompliant"
        }
      }
 
      resource "azurerm_storage_container" "new_test_container" {
        name                  = var.new_test_container_name
        storage_account_name  = azurerm_storage_account.new_test_storage.name
+       container_access_type = "private"
+     }
+
+     # Third test storage account (simulate non-compliance with a tag)
+     resource "azurerm_storage_account" "extra_test_storage" {
+       name                     = var.extra_test_storage_name
+       resource_group_name      = azurerm_resource_group.second_rg.name
+       location                 = azurerm_resource_group.second_rg.location
+       account_tier             = "Standard"
+       account_replication_type = "LRS"
+       tags = {
+         EncryptionTest = "NonCompliant"
+       }
+     }
+
+     resource "azurerm_storage_container" "extra_test_container" {
+       name                  = var.extra_test_container_name
+       storage_account_name  = azurerm_storage_account.extra_test_storage.name
        container_access_type = "private"
      }
