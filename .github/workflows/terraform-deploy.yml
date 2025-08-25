@@ -21,8 +21,8 @@ jobs:
       run: checkov -d . --framework terraform
 
   terraform:
-    needs: checkov  # Only runs if checkov job succeeds
     runs-on: ubuntu-latest
+    needs: checkov  # Ensures terraform waits for checkov to complete
     env:
       ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
