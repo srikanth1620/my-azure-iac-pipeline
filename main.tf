@@ -66,7 +66,7 @@ resource "azurerm_resource_group" "second_rg" {
   resource "azurerm_role_definition" "terraform_custom_role" {
     name        = "TerraformStorageKeyVaultManager"
     scope       = azurerm_resource_group.second_rg.id
-    description = "Custom role for Terraform to manage storage accounts and Key Vault keys"
+    description = "Custom role for Terraform to manage storage accounts, Key Vault keys, and role assignments"
 
     permissions {
       actions = [
