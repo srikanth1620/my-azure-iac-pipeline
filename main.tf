@@ -34,8 +34,7 @@
          type = "SystemAssigned"
        }
        customer_managed_key {
-         key_vault_id = azurerm_key_vault.cmk_vault.id
-         key_name     = azurerm_key_vault_key.cmk_key.name
+         key_vault_key_id = azurerm_key_vault_key.cmk_key.id
        }
        depends_on = [azurerm_key_vault.cmk_vault, azurerm_key_vault_key.cmk_key]
      }
