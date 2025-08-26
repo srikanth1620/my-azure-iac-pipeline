@@ -1,5 +1,4 @@
     # test 100
-    
     resource "azurerm_resource_group" "second_rg" {
     name     = var.second_rg_name
     location = var.location
@@ -20,7 +19,8 @@
     sku_name                    = "standard"
     tenant_id                   = var.tenant_id
     enable_rbac_authorization   = true
-    purge_protection_enabled    = false
+    purge_protection_enabled    = true
+    soft_delete_retention_in_days = 7
   }
 
   # Key Vault Key for CMK
