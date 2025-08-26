@@ -1,3 +1,4 @@
+    # test 100
 resource "azurerm_resource_group" "second_rg" {
     name     = var.second_rg_name
     location = var.location
@@ -62,35 +63,9 @@ resource "azurerm_resource_group" "second_rg" {
     principal_id         = azurerm_user_assigned_identity.cmk_identity.principal_id
   }
 
-  # Custom role for Terraform service principal
-  resource "azurerm_role_definition" "terraform_custom_role" {
-    name        = "TerraformStorageKeyVaultManager"
-    scope       = azurerm_resource_group.second_rg.id
-    description = "Custom role for Terraform to manage storage accounts, Key Vault keys, and role assignments"
-
-    permissions {
-      actions = [
-        "Microsoft.Storage/storageAccounts/read",
-        "Microsoft.Storage/storageAccounts/write",
-        "Microsoft.Storage/storageAccounts/delete",
-        "Microsoft.KeyVault/vaults/read",
-        "Microsoft.KeyVault/vaults/write",
-        "Microsoft.KeyVault/vaults/keys/read",
-        "Microsoft.KeyVault/vaults/keys/write",
-        "Microsoft.ManagedIdentity/userAssignedIdentities/read",
-        "Microsoft.ManagedIdentity/userAssignedIdentities/write",
-        "Microsoft.Authorization/roleAssignments/read",
-        "Microsoft.Authorization/roleAssignments/write",
-        "Microsoft.Authorization/roleAssignments/delete"
-      ]
-      not_actions = []
-    }
-    assignable_scopes = [azurerm_resource_group.second_rg.id]
-  }
-
   # Role assignment for Terraform service principal
   resource "azurerm_role_assignment" "service_principal_keyvault_access" {
-    scope                = azurerm_resource_group.second_rg.id
-    role_definition_name = azurerm_role_definition.terraform_custom_role.name
+    scope                = azurerm_key_vault.cmk_vault.id
+    role_definition_name = "Key Vault Administrator"
     principal_id         = var.service_principal_id
   }
