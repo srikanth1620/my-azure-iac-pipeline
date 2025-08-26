@@ -1,4 +1,4 @@
-  variable "second_rg_name" {
+variable "second_rg_name" {
        description = "Name of the second resource group"
        default     = "second-storage-rg"
      }
@@ -26,4 +26,9 @@
      variable "key_vault_name" {
        description = "Name of the Key Vault for CMK"
        default     = "cmkvault1620sri"
+     }
+
+     variable "cmk_identity_name" {
+       description = "Name of the user-assigned managed identity for CMK"
+       default     = "cmkidentity1620sri"
      }
