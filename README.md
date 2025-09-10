@@ -170,7 +170,7 @@ az identity show --resource-group SecureNodeAppGroup_central --name oidc-msi-85e
             location, name, resourceGroup, type: Metadata about the identity.
 
         Next Step 
-            take the principal id from the output and put it in the next cmd
+            take the principal id from the ABOVE output and put it in the next cmd
 
             az role assignment list --assignee cd0be6fc-f619-49c6-8ab8-82e5f5f66970 --scope /subscriptions/d142b1fc-9376-4248-93fb-7f8602c24e09/resourceGroups/SecureNodeAppGroup_central/providers/Microsoft.Web/sites/secure-node-app-123
                 [
@@ -195,3 +195,5 @@ az identity show --resource-group SecureNodeAppGroup_central --name oidc-msi-85e
                         "updatedOn": "2025-09-04T18:42:05.130980+00:00"
                     }
                 ]
+            What It Does:
+                if you look at the above output it displayes the scope or permissions
