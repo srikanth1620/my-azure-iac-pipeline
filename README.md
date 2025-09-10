@@ -130,6 +130,17 @@ How to create a simple appservice and deploy to Azure?
         Optional: Stream logs to verify deployment
         az webapp log tail --resource-group SecureNodeAppGroup_central --name secure-node-app
 
+        Additional Details 
+        
+            How the Service Principal Fits
+
+                The Service Principal is used in the GitHub Actions workflow to replace manual deployment commands like:
+
+                zip -r app.zip . -x ".git/*" "*.zip"
+                az webapp deployment source config-zip --resource-group SecureNodeAppGroup_central --name secure-node-app --src app.zip
+
+                Instead of running these manually, the workflow uses the Service Principal to authenticate and deploy the app programmatically.
+
 
 How to display details of user-assigned managed identity (oidc-msi-85e5) ?
 ----------------------------------------------------------------------------
