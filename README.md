@@ -24,14 +24,14 @@ az ad sp list --display-name "github-actions-sp" --query "[].{appId:appId, displ
 
 How to verify or find out the subscription id ? 
 ----------------------------------------------------------------------------
-az account show --query "id" -o tsv
+    az account show --query "id" -o tsv
 
-output
-d142b1fc-9376-4248-93fb-7f8602c24e09
+    output
+        d142b1fc-9376-4248-93fb-7f8602c24e09
 
 How to verify or find out the tenant id ? 
 ----------------------------------------------------------------------------
- az account show --query "tenantId" -o tsv
+    az account show --query "tenantId" -o tsv
 
-output
-550420cd-a4f2-4642-941d-ec8d931bcceb
+    output
+        550420cd-a4f2-4642-941d-ec8d931bcceb
