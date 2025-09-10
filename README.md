@@ -57,3 +57,21 @@ How to show account info ?
                 "type": "user"
             }
             }
+
+How to create service principal ? 
+----------------------------------------------------------------------------
+    az ad sp create-for-rbac --name "github-actions-delete" --role "Contributor" --scopes /subscriptions/d142b1fc-9376-4248-93fb-7f8602c24e09 --sdk-auth
+
+    output
+        {
+            "clientId": "",
+            "clientSecret": "",
+            "subscriptionId": "d142b1fc-9376-4248-93fb-7f8602c24e09",
+            "tenantId": "550420cd-a4f2-4642-941d-ec8d931bcceb",
+            "activeDirectoryEndpointUrl": "https://login.microsoftonline.com",
+            "resourceManagerEndpointUrl": "https://management.azure.com/",
+            "activeDirectoryGraphResourceId": "https://graph.windows.net/",
+            "sqlManagementEndpointUrl": "https://management.core.windows.net:8443/",
+            "galleryEndpointUrl": "https://gallery.azure.com/",
+            "managementEndpointUrl": "https://management.core.windows.net/"
+            }
