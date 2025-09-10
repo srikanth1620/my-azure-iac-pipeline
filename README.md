@@ -170,28 +170,28 @@ az identity show --resource-group SecureNodeAppGroup_central --name oidc-msi-85e
             location, name, resourceGroup, type: Metadata about the identity.
 
         Next Step 
-            take the principal id from the output and put it in the next cmd)
+            take the principal id from the output and put it in the next cmd
 
-    az role assignment list --assignee cd0be6fc-f619-49c6-8ab8-82e5f5f66970 --scope /subscriptions/d142b1fc-9376-4248-93fb-7f8602c24e09/resourceGroups/SecureNodeAppGroup_central/providers/Microsoft.Web/sites/secure-node-app-123
-        [
-            {
-                "condition": null,
-                "conditionVersion": null,
-                "createdBy": "104d0b66-ee84-4fe2-ae6c-e1a9a8f0bc31",
-                "createdOn": "2025-09-04T18:42:05.130980+00:00",
-                "delegatedManagedIdentityResourceId": null,
-                "description": null,
-                "id": "/subscriptions/d142b1fc-9376-4248-93fb-7f8602c24e09/resourceGroups/SecureNodeAppGroup_central/providers/Microsoft.Web/sites/secure-node-app-123/providers/Microsoft.Authorization/roleAssignments/60260273-65f3-492b-b99c-3df13b0874c6",
-                "name": "60260273-65f3-492b-b99c-3df13b0874c6",
-                "principalId": "cd0be6fc-f619-49c6-8ab8-82e5f5f66970",
-                "principalName": "d8a439d9-8a4e-4dce-a51d-24f2937b25bc",
-                "principalType": "ServicePrincipal",
-                "resourceGroup": "SecureNodeAppGroup_central",
-                "roleDefinitionId": "/subscriptions/d142b1fc-9376-4248-93fb-7f8602c24e09/providers/Microsoft.Authorization/roleDefinitions/de139f84-1756-47ae-9be6-808fbbe84772",
-                "roleDefinitionName": "Website Contributor",
-                "scope": "/subscriptions/d142b1fc-9376-4248-93fb-7f8602c24e09/resourceGroups/SecureNodeAppGroup_central/providers/Microsoft.Web/sites/secure-node-app-123",
-                "type": "Microsoft.Authorization/roleAssignments",
-                "updatedBy": "104d0b66-ee84-4fe2-ae6c-e1a9a8f0bc31",
-                "updatedOn": "2025-09-04T18:42:05.130980+00:00"
-            }
-        ]
+            az role assignment list --assignee cd0be6fc-f619-49c6-8ab8-82e5f5f66970 --scope /subscriptions/d142b1fc-9376-4248-93fb-7f8602c24e09/resourceGroups/SecureNodeAppGroup_central/providers/Microsoft.Web/sites/secure-node-app-123
+                [
+                    {
+                        "condition": null,
+                        "conditionVersion": null,
+                        "createdBy": "104d0b66-ee84-4fe2-ae6c-e1a9a8f0bc31",
+                        "createdOn": "2025-09-04T18:42:05.130980+00:00",
+                        "delegatedManagedIdentityResourceId": null,
+                        "description": null,
+                        "id": "/subscriptions/d142b1fc-9376-4248-93fb-7f8602c24e09/resourceGroups/SecureNodeAppGroup_central/providers/Microsoft.Web/sites/secure-node-app-123/providers/Microsoft.Authorization/roleAssignments/60260273-65f3-492b-b99c-3df13b0874c6",
+                        "name": "60260273-65f3-492b-b99c-3df13b0874c6",
+                        "principalId": "cd0be6fc-f619-49c6-8ab8-82e5f5f66970",
+                        "principalName": "d8a439d9-8a4e-4dce-a51d-24f2937b25bc",
+                        "principalType": "ServicePrincipal",
+                        "resourceGroup": "SecureNodeAppGroup_central",
+                        "roleDefinitionId": "/subscriptions/d142b1fc-9376-4248-93fb-7f8602c24e09/providers/Microsoft.Authorization/roleDefinitions/de139f84-1756-47ae-9be6-808fbbe84772",
+                        "roleDefinitionName": "Website Contributor",
+                        "scope": "/subscriptions/d142b1fc-9376-4248-93fb-7f8602c24e09/resourceGroups/SecureNodeAppGroup_central/providers/Microsoft.Web/sites/secure-node-app-123",
+                        "type": "Microsoft.Authorization/roleAssignments",
+                        "updatedBy": "104d0b66-ee84-4fe2-ae6c-e1a9a8f0bc31",
+                        "updatedOn": "2025-09-04T18:42:05.130980+00:00"
+                    }
+                ]
