@@ -35,3 +35,25 @@ How to verify or find out the tenant id ?
 
     output
         550420cd-a4f2-4642-941d-ec8d931bcceb
+
+How to show account info ? 
+----------------------------------------------------------------------------
+    az account show
+
+    output
+        {
+            "environmentName": "AzureCloud",
+            "homeTenantId": "550420cd-a4f2-4642-941d-ec8d931bcceb",
+            "id": "d142b1fc-9376-4248-93fb-7f8602c24e09",
+            "isDefault": true,
+            "managedByTenants": [],
+            "name": "Azure subscription 1",
+            "state": "Enabled",
+            "tenantDefaultDomain": "srisrib.onmicrosoft.com",
+            "tenantDisplayName": "Self",
+            "tenantId": "550420cd-a4f2-4642-941d-ec8d931bcceb",
+            "user": {
+                "name": "SriSrinivasan@srisrib.onmicrosoft.com",
+                "type": "user"
+            }
+            }
