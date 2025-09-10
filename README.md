@@ -129,3 +129,30 @@ How to create a simple appservice and deploy to Azure?
 
         Optional: Stream logs to verify deployment
         az webapp log tail --resource-group SecureNodeAppGroup_central --name secure-node-app
+
+
+How to display details of user-assigned managed identity (oidc-msi-85e5) ?
+----------------------------------------------------------------------------
+az identity show --resource-group SecureNodeAppGroup_central --name oidc-msi-85e5
+    {
+        "clientId": "d8a439d9-8a4e-4dce-a51d-24f2937b25bc",
+        "id": "/subscriptions/d142b1fc-9376-4248-93fb-7f8602c24e09/resourcegroups/SecureNodeAppGroup_central/providers/Microsoft.ManagedIdentity/userAssignedIdentities/oidc-msi-85e5",
+        "location": "centralus",
+        "name": "oidc-msi-85e5",
+        "principalId": "cd0be6fc-f619-49c6-8ab8-82e5f5f66970",
+        "resourceGroup": "SecureNodeAppGroup_central",
+        "systemData": null,
+        "tags": {},
+        "tenantId": "550420cd-a4f2-4642-941d-ec8d931bcceb",
+        "type": "Microsoft.ManagedIdentity/userAssignedIdentities"
+        }
+
+        What It Does:
+            Retrieves metadata for the specified managed identity.
+            Output includes:
+
+            clientId: d8a439d9-8a4e-4dce-a51d-24f2937b25bc (used for authentication).
+            principalId: cd0be6fc-f619-49c6-8ab8-82e5f5f66970 (used for role assignments).
+            tenantId: 550420cd-a4f2-4642-941d-ec8d931bcceb (matches your subscription’s tenant).
+            id: The resource ID of the managed identity.
+            location, name, resourceGroup, type: Metadata about the identity.
