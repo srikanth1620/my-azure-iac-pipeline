@@ -110,23 +110,23 @@ How to show what permissions we have for a role ?
 How to create a simple appservice and deploy to Azure?
 ----------------------------------------------------------------------------
 
-# Create a service principal with Contributor role for the subscription
-az ad sp create-for-rbac --name "secure-node-app-sp" --role Contributor --scopes /subscriptions/d142b1fc-9376-4248-93fb-7f8602c24e09 --sdk-auth
+        Create a service principal with Contributor role for the subscription
+        az ad sp create-for-rbac --name "secure-node-app-sp" --role Contributor --scopes /subscriptions/d142b1fc-9376-4248-93fb-7f8602c24e09 --sdk-auth
 
-# Create a resource group
-az group create --name SecureNodeAppGroup --location eastus
+        Create a resource group
+        az group create --name SecureNodeAppGroup --location eastus
 
-# Create an App Service plan
-az appservice plan create --name SecureNodeAppServicePlan --resource-group SecureNodeAppGroup --sku B1 --is-linux
+        Create an App Service plan
+        az appservice plan create --name SecureNodeAppServicePlan --resource-group SecureNodeAppGroup --sku B1 --is-linux
 
-# Create an App Service
-az webapp create --resource-group SecureNodeAppGroup --plan SecureNodeAppServicePlan --name secure-node-app --runtime "NODE|18-lts"
+        Create an App Service
+        az webapp create --resource-group SecureNodeAppGroup --plan SecureNodeAppServicePlan --name secure-node-app --runtime "NODE|18-lts"
 
-# Zip the app for deployment
-zip -r app.zip . -x ".git/*" "*.zip"
+        Zip the app for deployment
+        zip -r app.zip . -x ".git/*" "*.zip"
 
-# Deploy the app
-az webapp deployment source config-zip --resource-group SecureNodeAppGroup --name secure-node-app --src app.zip
+        Deploy the app
+        az webapp deployment source config-zip --resource-group SecureNodeAppGroup --name secure-node-app --src app.zip
 
-# Optional: Stream logs to verify deployment
-az webapp log tail --resource-group SecureNodeAppGroup --name secure-node-app
+        Optional: Stream logs to verify deployment
+        az webapp log tail --resource-group SecureNodeAppGroup --name secure-node-app
