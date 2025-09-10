@@ -134,17 +134,18 @@ How to create a simple appservice and deploy to Azure?
 How to display details of user-assigned managed identity (oidc-msi-85e5) ?
 ----------------------------------------------------------------------------
 az identity show --resource-group SecureNodeAppGroup_central --name oidc-msi-85e5
-    {
-        "clientId": "d8a439d9-8a4e-4dce-a51d-24f2937b25bc",
-        "id": "/subscriptions/d142b1fc-9376-4248-93fb-7f8602c24e09/resourcegroups/SecureNodeAppGroup_central/providers/Microsoft.ManagedIdentity/userAssignedIdentities/oidc-msi-85e5",
-        "location": "centralus",
-        "name": "oidc-msi-85e5",
-        "principalId": "cd0be6fc-f619-49c6-8ab8-82e5f5f66970",
-        "resourceGroup": "SecureNodeAppGroup_central",
-        "systemData": null,
-        "tags": {},
-        "tenantId": "550420cd-a4f2-4642-941d-ec8d931bcceb",
-        "type": "Microsoft.ManagedIdentity/userAssignedIdentities"
+    
+        {
+            "clientId": "d8a439d9-8a4e-4dce-a51d-24f2937b25bc",
+            "id": "/subscriptions/d142b1fc-9376-4248-93fb-7f8602c24e09/resourcegroups/SecureNodeAppGroup_central/providers/Microsoft.ManagedIdentity/userAssignedIdentities/oidc-msi-85e5",
+            "location": "centralus",
+            "name": "oidc-msi-85e5",
+            "principalId": "cd0be6fc-f619-49c6-8ab8-82e5f5f66970",
+            "resourceGroup": "SecureNodeAppGroup_central",
+            "systemData": null,
+            "tags": {},
+            "tenantId": "550420cd-a4f2-4642-941d-ec8d931bcceb",
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities"
         }
 
         What It Does:
