@@ -11,13 +11,15 @@ az ad sp list --display-name "github-actions-sp" --query "[].{appId:appId, displ
 
 .......Second use this cmd to display sp credentils 
 
-az ad sp credential reset --id 130b5cbe-c92c-4b51-b6d4-0cf05e1e3775 --append
+    az ad sp credential reset --id 130b5cbe-c92c-4b51-b6d4-0cf05e1e3775 --append
+    
+    output
 
-{
-  "appId": "",
-  "password": "",
-  "tenant": "550420cd-a4f2-4642-941d-ec8d931bcceb"
-}
+        {
+         "appId": "",
+         "password": "",
+         "tenant": "550420cd-a4f2-4642-941d-ec8d931bcceb"
+        }
 
 
 How to verify or find out the subscription id ? 
