@@ -14,13 +14,17 @@ Example: If you back up every 4 hours and lose data since the last backup, RPO i
 DR Features - Versioning and Point in time recovery? 
 ----------------------------------------------------------------------------
 
-Versioning - Automatically creates and stores a new version of a blob each time it’s modified or overwritten, allowing recovery of specific previous versions.
+Versioning - Tracks full version history
+
+Automatically creates and stores a new version of a blob each time it’s modified or overwritten, allowing recovery of specific previous versions.
 
 Purpose: Protects against accidental overwrites or deletions by maintaining a history of blob versions.
 
 Example: If you overwrite “file.txt” three times, versioning keeps all three versions, and you can restore any specific version.
 
 Point-in-Time Restore:
+
+Restores an entire container at a specific moment
 
 Restores an entire container to its state at a specific moment within the retention period (e.g., up to 7 days, matching your soft delete period).
 
@@ -35,6 +39,8 @@ Soft Delete vs. Versioning in Azure Blob Storage, using a simple example with a 
 
 Soft Delete:
 
+Soft delete retains the original file.txt for 7 days
+
 What It Is: Keeps deleted or overwritten blobs for a set period (e.g., your 7-day retention) for recovery.
 Scope: Individual blobs, latest state only.
 Example: You delete file.txt or overwrite it with new content. Soft delete retains the original file.txt for 7 days, recoverable via Undelete.
@@ -43,6 +49,8 @@ Your Setup: Enabled for 7 days.
 
 
 Versioning:
+
+ Tracks full version history
 
 What It Is: Saves a new version of a blob each time it’s modified or overwritten, allowing recovery of any previous version.
 Scope: Individual blobs, all versions.
