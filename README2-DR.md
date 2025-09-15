@@ -75,3 +75,20 @@ RA-GRS (Read-Access Geo-Redundant Storage): Replicates data within one US East d
 RA-GZRS: Combines ZRS in US East (across AZs) with read-access replication to a secondary region, better for AZ redundancy but involves another region.
 
 LRS (Locally-Redundant Storage): Replicates data three times in one US East data center, no AZ redundancy, less resilient for DR.
+
+What is GRS ? what is RA-GRS ? 
+----------------------------------------------------------------------------
+
+US East (Primary): Three replicas in a single data center (same AZ) in US East.
+Central US (Secondary): Three replicas in a single data center (same AZ) in Central US.
+
+GRS (Geo-Redundant Storage): You cannot read data from the secondary region (e.g., Central US) under normal conditions. The secondary replicas are only accessible after a Microsoft-initiated failover to that region in case of a primary region (US East) outage.
+
+RA-GRS (same as GRS + Read Access on the secondary)
+
+Primary Region (US East): Data is synchronously replicated three times within a single data center in US East, typically in one Availability Zone (AZ) (e.g., an AZ in US East 1), using Locally-Redundant Storage (LRS).
+
+Secondary Region (Central US): Data is asynchronously replicated to a single data center in Central US, also in one AZ, resulting in three replicas in that data center (LRS in the secondary).
+
+Read Access: Unlike GRS, you can read data from the Central US secondary region at any time using a secondary endpoint (e.g., youraccount-secondary.blob.core.windows.net).
+
