@@ -17,10 +17,10 @@ Microsoft Entra ID does not natively support automatic expiry for cross-tenant a
 
 How to check inbound and outbound access ? 
 
-Click B2B direct connect for all validation 
+    Click B2B direct connect for all validation 
 
-Path: Entra admin center > Identity > External Identities > Cross-tenant access settings > Default settings > Edit inbound defaults > B2B direct connect.
+    Path: Entra admin center > Identity > External Identities > Cross-tenant access settings > Default settings > Edit inbound defaults > B2B direct connect.
 
-Path: Entra admin center > Identity > External Identities > Cross-tenant access settings > Default settings > Edit outbound defaults > B2B direct connect.
+    Path: Entra admin center > Identity > External Identities > Cross-tenant access settings > Default settings > Edit outbound defaults > B2B direct connect.
 
-Look for user access and application application accesss 
+    Look for user access and application application accesss 
