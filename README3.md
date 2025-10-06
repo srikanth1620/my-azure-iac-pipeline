@@ -14,3 +14,13 @@ B2B collaboration - Invite external users as guests to your tenant for collabora
 Automatic expiry . 
 
 Microsoft Entra ID does not natively support automatic expiry for cross-tenant access settings (B2B Direct Connect or Collaboration) as of October 2025. Unlike B2B Collaboration guest accounts (which support access reviews and expiry via Microsoft Entra ID Governance), B2B Direct Connect relies on mutual trust settings that remain active until manually removed. However, you can implement a process to simulate expiry using manual reviews, automation, or governance tools.
+
+How to check inbound and outbound access ? 
+
+Click B2B direct connect for all validation 
+
+Path: Entra admin center > Identity > External Identities > Cross-tenant access settings > Default settings > Edit inbound defaults > B2B direct connect.
+
+Path: Entra admin center > Identity > External Identities > Cross-tenant access settings > Default settings > Edit outbound defaults > B2B direct connect.
+
+Look for user access and application application accesss 
