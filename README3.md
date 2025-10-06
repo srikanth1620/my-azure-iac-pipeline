@@ -6,6 +6,7 @@ B2B direct connect - Mutual trust between Entra tenants for seamless access to "
     Users stay in their home org; no org switch needed; managed via channel owner.
 
 B2B collaboration - Invite external users as guests to your tenant for collaboration across resources.
+
     Broad: Teams, SharePoint, apps, SaaS, custom apps, and Azure portal.
     Users switch orgs in apps; guest account created in your tenant.
 
