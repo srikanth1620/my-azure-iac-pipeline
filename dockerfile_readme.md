@@ -1,23 +1,24 @@
-# Use official Node.js LTS image
-FROM node:20-alpine
 
-# Set working directory
-WORKDIR /app
+    # Use official Node.js LTS image
+        FROM node:20-alpine
 
-# Copy package files
-COPY package*.json ./
+    # Set working directory
+        WORKDIR /app
 
-# Install dependencies
-RUN npm install --production
+    # Copy package files
+        COPY package*.json ./
 
-# Copy app source
-COPY . .
+    # Install dependencies
+        RUN npm install --production
 
-# Expose port
-EXPOSE 3000
+    # Copy app source
+        COPY . .
 
-# Start app
-CMD ["node", "app.js"]
+    # Expose port
+        EXPOSE 3000
+
+    # Start app
+        CMD ["node", "app.js"]
 
 Interview Questions
 can I override cmd if so how ?  Entrypoint?
