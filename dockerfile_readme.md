@@ -21,6 +21,6 @@
         CMD ["node", "app.js"]
 
 Interview Questions
-can I override cmd if so how ?  Entrypoint?
-what each cmd does?
-When Java gets installed?
+    can I override cmd if so how ?  Entrypoint?
+    what each cmd does?
+    When Java gets installed?
