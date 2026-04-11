@@ -1,21 +1,17 @@
+# backend.tf - Using existing storage account (no creation)
+
 data "azurerm_resource_group" "tfstate" {
   name = "tfstate-rg"
 }
 
-resource "azurerm_storage_account" "tfstate" {
-  name                     = "tfstate1620sri"     # Must be globally unique and all lowercase
-  resource_group_name      = data.azurerm_resource_group.tfstate.name
-  location                 = data.azurerm_resource_group.tfstate.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-
-  # Minimal settings - should work now that policy is removed
-  min_tls_version                  = "TLS1_2"
-  allow_nested_items_to_be_public  = false
+# Read the existing storage account (do not create it again)
+data "azurerm_storage_account" "tfstate" {
+  name                = "tfstate1620sri"
+  resource_group_name = "tfstate-rg"
 }
 
 resource "azurerm_storage_container" "tfstate" {
   name                  = "tfstate-container"
-  storage_account_name  = azurerm_storage_account.tfstate.name
+  storage_account_id    = data.azurerm_storage_account.tfstate.id     # Use storage_account_id (new recommended way)
   container_access_type = "private"
 }
