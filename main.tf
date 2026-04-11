@@ -1,9 +1,27 @@
-# main.tf - Minimal clean version (no CMK)
+# main.tf - Clean starting point
 
-# Use existing Resource Group
-data "azurerm_resource_group" "second_rg" {
-  name = var.second_rg_name
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 4.0"
+    }
+  }
 }
 
-# This file is intentionally minimal so terraform plan/apply can succeed
-# You can add your other resources later
+# Use existing Resource Group for tfstate
+data "azurerm_resource_group" "tfstate" {
+  name = "tfstate-rg"
+}
+
+# Read existing storage account
+data "azurerm_storage_account" "tfstate" {
+  name                = "tfstate1620sri"
+  resource_group_name = "tfstate-rg"
+}
+
+# Read existing container (do not create it again)
+data "azurerm_storage_container" "tfstate" {
+  name                  = "tfstate-container"
+  storage_account_name  = "tfstate1620sri"
+}
