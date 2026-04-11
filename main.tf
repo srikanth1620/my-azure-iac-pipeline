@@ -1,4 +1,4 @@
-# main.tf - Clean bootstrap version
+# main.tf - Clean bootstrap version with provider block
 
 terraform {
   required_providers {
@@ -9,10 +9,15 @@ terraform {
   }
 }
 
+# Configure the AzureRM provider
+provider "azurerm" {
+  features {}
+}
+
 # 1. Create Resource Group for Terraform state
 resource "azurerm_resource_group" "tfstate" {
   name     = "tfstate-rg"
-  location = "East US 2"     # Change if you want a different region
+  location = "East US 2"     # Change this to your preferred region if needed
 }
 
 # 2. Create Storage Account for Terraform state
