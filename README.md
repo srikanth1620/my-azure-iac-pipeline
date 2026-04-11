@@ -1,4 +1,4 @@
-How to update service principle credentials ? 
+How to update service principle credentials ? //
 ----------------------------------------------------------------------------
 
 ......First find out app id by 
