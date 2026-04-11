@@ -1,4 +1,4 @@
-# main.tf - Initial bootstrap (no backend yet)
+# main.tf - Clean bootstrap version (no backend yet)
 
 terraform {
   required_providers {
