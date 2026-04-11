@@ -1,4 +1,4 @@
-# main.tf - Clean bootstrap version (no backend yet)
+# main.tf - Clean bootstrap version
 
 terraform {
   required_providers {
@@ -9,10 +9,10 @@ terraform {
   }
 }
 
-# 1. Create Resource Group for tfstate
+# 1. Create Resource Group for Terraform state
 resource "azurerm_resource_group" "tfstate" {
   name     = "tfstate-rg"
-  location = "East US 2"
+  location = "East US 2"     # Change if you want a different region
 }
 
 # 2. Create Storage Account for Terraform state
@@ -27,7 +27,7 @@ resource "azurerm_storage_account" "tfstate" {
   allow_nested_items_to_be_public  = false
 }
 
-# 3. Create Container
+# 3. Create Container for Terraform state
 resource "azurerm_storage_container" "tfstate" {
   name                  = "tfstate-container"
   storage_account_id    = azurerm_storage_account.tfstate.id
