@@ -1,4 +1,4 @@
-# main.tf - Clean bootstrap version with provider block
+# main.tf
 
 terraform {
   required_providers {
@@ -9,32 +9,62 @@ terraform {
   }
 }
 
-# Configure the AzureRM provider
 provider "azurerm" {
   features {}
 }
 
-# 1. Create Resource Group for Terraform state
-resource "azurerm_resource_group" "tfstate" {
-  name     = "tfstate-rg"
-  location = "East US 2"     # Change this to your preferred region if needed
+# Use existing Resource Group for tfstate (already created)
+data "azurerm_resource_group" "tfstate" {
+  name = "tfstate-rg"
 }
 
-# 2. Create Storage Account for Terraform state
-resource "azurerm_storage_account" "tfstate" {
-  name                     = "tfstate1620sri"
-  resource_group_name      = azurerm_resource_group.tfstate.name
-  location                 = azurerm_resource_group.tfstate.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-
-  min_tls_version                  = "TLS1_2"
-  allow_nested_items_to_be_public  = false
+# Use existing Storage Account for backend
+data "azurerm_storage_account" "tfstate" {
+  name                = "tfstate1620sri"
+  resource_group_name = "tfstate-rg"
 }
 
-# 3. Create Container for Terraform state
-resource "azurerm_storage_container" "tfstate" {
+# Use existing Container for backend
+data "azurerm_storage_container" "tfstate" {
   name                  = "tfstate-container"
-  storage_account_id    = azurerm_storage_account.tfstate.id
-  container_access_type = "private"
+  storage_account_name  = "tfstate1620sri"
+}
+
+# =============================================
+# Your actual resources start here
+# =============================================
+
+# Create a new Resource Group for your application
+resource "azurerm_resource_group" "app" {
+  name     = "app-rg"
+  location = "East US 2"
+}
+
+# Create a simple Cosmos DB Account (Serverless)
+resource "azurerm_cosmosdb_account" "main" {
+  name                = "cosmos-1620sri"
+  location            = azurerm_resource_group.app.location
+  resource_group_name = azurerm_resource_group.app.name
+  offer_type          = "Standard"
+  kind                = "GlobalDocumentDB"
+
+  consistency_policy {
+    consistency_level = "Session"
+  }
+
+  geo_location {
+    location          = azurerm_resource_group.app.location
+    failover_priority = 0
+  }
+
+  capabilities {
+    name = "EnableServerless"
+  }
+}
+
+# Create a simple SQL Database inside Cosmos DB
+resource "azurerm_cosmosdb_sql_database" "main" {
+  name                = "mydatabase"
+  resource_group_name = azurerm_resource_group.app.name
+  account_name        = azurerm_cosmosdb_account.main.name
 }
