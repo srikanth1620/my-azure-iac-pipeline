@@ -1,4 +1,4 @@
-# main.tf - Now with backend configured
+# main.tf - Now with backend 
 
 terraform {
   required_providers {
