@@ -1,0 +1,130 @@
+Complete Step-by-Step Summary (Today's Fresh Setup)
+1. Created a New Service Principal (App Registration)
+
+Went to Microsoft Entra ID → App registrations → + New registration
+Name: github-actions-sp
+Supported account types: Accounts in this organizational directory only
+After creation, we got:
+Application (Client) ID: 4956f32e-04e3-41e6-8094-6604fbb932ad
+Directory (Tenant) ID: 550420cd-a4f2-4642-941d-ec8d931bcceb
+
+Important Note: We used the Application (Client) ID, not the Secret ID.
+
+2. Created Client Secret
+
+Went to the App registration → Certificates & secrets
+Created a new Client Secret (Description: something like "GitHub Actions Terraform")
+Copied the actual secret value (the long string starting with ~)
+We did NOT use the Secret ID anywhere (e.g., 2d319738-... was ignored/deleted)
+
+***** Important *****
+Please note we used client id (not secret id) for AZURE_CLIENT_ID
+We did use secret value for AZURE_CLIENT_SECRET
+***** Important *****
+
+3. Added GitHub Secrets
+Added the following 4 secrets in GitHub Repository → Settings → Secrets and variables → Actions:
+
+AZURE_CLIENT_ID        → 4956f32e-04e3-41e6-8094-6604fbb932ad (Client ID)
+AZURE_TENANT_ID        → 550420cd-a4f2-4642-941d-ec8d931bcceb
+AZURE_CLIENT_SECRET    → the long ~... client secret value
+AZURE_SUBSCRIPTION_ID  → your Azure Subscription ID
+
+4. Created Backend Storage for Terraform
+
+Resource Group: tfstate-rg
+Storage Account: tfstate1620sri
+Container: tfstate-container
+
+5. Assigned Permissions
+
+Assigned Storage Blob Data Contributor role to the Service Principal (github-actions-sp) on the storage account tfstate1620sri
+
+6. Created GitHub Actions Workflow
+We used one single workflow file: .github/workflows/terraform-deploy.yml
+
+name: Terraform Deploy to Azure
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  terraform:
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.10.x"
+
+      - name: Configure Azure Credentials
+        run: |
+          echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV
+          echo "ARM_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}" >> $GITHUB_ENV
+          echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
+          echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
+
+      - name: Login to Azure using Service Principal
+        run: |
+          az login --service-principal \
+            -u ${{ secrets.AZURE_CLIENT_ID }} \
+            -p ${{ secrets.AZURE_CLIENT_SECRET }} \
+            --tenant ${{ secrets.AZURE_TENANT_ID }}
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan -out=plan.tfplan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve plan.tfplan
+
+7 Tested with Simple main.tf
+We used a simple test to confirm everything works (created test-rg).
+
+# main.tf - Fixed with explicit backend configuration
+
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 4.0"
+    }
+  }
+
+  backend "azurerm" {
+    resource_group_name  = "tfstate-rg"
+    storage_account_name = "tfstate1620sri"
+    container_name       = "tfstate-container"
+    key                  = "terraform.tfstate"
+
+    # Important: Use service principal authentication for the backend
+    use_azuread_auth = true
+  }
+}
+
+provider "azurerm" {
+  features {}
+}
+
+# Simple test Resource Group
+resource "azurerm_resource_group" "test" {
+  name     = "test-rg"
+  location = "Central US"
+}
+
+output "resource_group_name" {
+  value = azurerm_resource_group.test.name
+}

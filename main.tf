@@ -1,4 +1,4 @@
-# main.tf - Fixed with explicit backend configuration
+# main.tf - Fresh Backend Creation
 
 terraform {
   required_providers {
@@ -7,28 +7,33 @@ terraform {
       version = "~> 4.0"
     }
   }
-
-  backend "azurerm" {
-    resource_group_name  = "tfstate-rg"
-    storage_account_name = "tfstate1620sri"
-    container_name       = "tfstate-container"
-    key                  = "terraform.tfstate"
-
-    # Important: Use service principal authentication for the backend
-    use_azuread_auth = true
-  }
 }
 
 provider "azurerm" {
   features {}
 }
 
-# Simple test Resource Group
-resource "azurerm_resource_group" "test" {
-  name     = "test-rg"
+# 1. Create Resource Group for Terraform state
+resource "azurerm_resource_group" "tfstate" {
+  name     = "tfstate-rg"
   location = "Central US"
 }
 
-output "resource_group_name" {
-  value = azurerm_resource_group.test.name
+# 2. Create Storage Account for Terraform state
+resource "azurerm_storage_account" "tfstate" {
+  name                     = "tfstate1620sri"
+  resource_group_name      = azurerm_resource_group.tfstate.name
+  location                 = azurerm_resource_group.tfstate.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+
+  min_tls_version                  = "TLS1_2"
+  allow_nested_items_to_be_public  = false
+}
+
+# 3. Create Container for Terraform state
+resource "azurerm_storage_container" "tfstate" {
+  name                  = "tfstate-container"
+  storage_account_id    = azurerm_storage_account.tfstate.id
+  container_access_type = "private"
 }
