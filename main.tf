@@ -1,39 +1,49 @@
-name: Terraform Deploy
+# main.tf - Clean version with backend
 
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch: {}
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 4.0"
+    }
+  }
 
-permissions:
-  contents: read
+  backend "azurerm" {
+    resource_group_name  = "tfstate-rg"
+    storage_account_name = "tfstate1620sri"
+    container_name       = "tfstate-container"
+    key                  = "terraform.tfstate"
+  }
+}
 
-jobs:
-  terraform:
-    runs-on: ubuntu-latest
+provider "azurerm" {
+  features {}
+}
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+# Example resource group for your app
+resource "azurerm_resource_group" "app" {
+  name     = "app-rg"
+  location = "Central US"
+}
 
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+# Example Cosmos DB (simple)
+resource "azurerm_cosmosdb_account" "main" {
+  name                = "cosmos-1620sri"
+  location            = azurerm_resource_group.app.location
+  resource_group_name = azurerm_resource_group.app.name
+  offer_type          = "Standard"
+  kind                = "GlobalDocumentDB"
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: latest
+  consistency_policy {
+    consistency_level = "Session"
+  }
 
-      - name: Terraform Init
-        run: terraform init
+  geo_location {
+    location          = azurerm_resource_group.app.location
+    failover_priority = 0
+  }
 
-      - name: Terraform Plan
-        run: terraform plan
-
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
+  capabilities {
+    name = "EnableServerless"
+  }
+}
