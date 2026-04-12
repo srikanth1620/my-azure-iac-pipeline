@@ -1,56 +1,39 @@
-# main.tf - Now with backend 
+name: Terraform Deploy
 
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 4.0"
-    }
-  }
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: {}
 
-  # Backend configuration - points to the storage you just created
-  backend "azurerm" {
-    resource_group_name  = "tfstate-rg"
-    storage_account_name = "tfstate1620sri"
-    container_name       = "tfstate-container"
-    key                  = "terraform.tfstate"
-  }
-}
+permissions:
+  contents: read
 
-provider "azurerm" {
-  features {}
-}
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
 
-# Example: Create a simple resource group for your application
-resource "azurerm_resource_group" "app" {
-  name     = "app-rg"
-  location = "Central US"
-}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-# Example: Add a simple Cosmos DB (you can expand this later)
-resource "azurerm_cosmosdb_account" "main" {
-  name                = "cosmos-1620sri"
-  location            = azurerm_resource_group.app.location
-  resource_group_name = azurerm_resource_group.app.name
-  offer_type          = "Standard"
-  kind                = "GlobalDocumentDB"
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
 
-  consistency_policy {
-    consistency_level = "Session"
-  }
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: latest
 
-  geo_location {
-    location          = azurerm_resource_group.app.location
-    failover_priority = 0
-  }
+      - name: Terraform Init
+        run: terraform init
 
-  capabilities {
-    name = "EnableServerless"
-  }
-}
+      - name: Terraform Plan
+        run: terraform plan
 
-resource "azurerm_cosmosdb_sql_database" "main" {
-  name                = "mydatabase"
-  resource_group_name = azurerm_resource_group.app.name
-  account_name        = azurerm_cosmosdb_account.main.name
-}
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
