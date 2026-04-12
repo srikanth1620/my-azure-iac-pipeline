@@ -1,4 +1,4 @@
-# main.tf - Clean version with Central US
+# main.tf - Now with backend configured
 
 terraform {
   required_providers {
@@ -7,33 +7,50 @@ terraform {
       version = "~> 4.0"
     }
   }
+
+  # Backend configuration - points to the storage you just created
+  backend "azurerm" {
+    resource_group_name  = "tfstate-rg"
+    storage_account_name = "tfstate1620sri"
+    container_name       = "tfstate-container"
+    key                  = "terraform.tfstate"
+  }
 }
 
 provider "azurerm" {
   features {}
 }
 
-# Resource Group for Terraform state
-resource "azurerm_resource_group" "tfstate" {
-  name     = "tfstate-rg"
-  location = "Central US"        # Changed to match your SP region
+# Example: Create a simple resource group for your application
+resource "azurerm_resource_group" "app" {
+  name     = "app-rg"
+  location = "Central US"
 }
 
-# Storage Account for Terraform state
-resource "azurerm_storage_account" "tfstate" {
-  name                     = "tfstate1620sri"
-  resource_group_name      = azurerm_resource_group.tfstate.name
-  location                 = azurerm_resource_group.tfstate.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
+# Example: Add a simple Cosmos DB (you can expand this later)
+resource "azurerm_cosmosdb_account" "main" {
+  name                = "cosmos-1620sri"
+  location            = azurerm_resource_group.app.location
+  resource_group_name = azurerm_resource_group.app.name
+  offer_type          = "Standard"
+  kind                = "GlobalDocumentDB"
 
-  min_tls_version                  = "TLS1_2"
-  allow_nested_items_to_be_public  = false
+  consistency_policy {
+    consistency_level = "Session"
+  }
+
+  geo_location {
+    location          = azurerm_resource_group.app.location
+    failover_priority = 0
+  }
+
+  capabilities {
+    name = "EnableServerless"
+  }
 }
 
-# Storage Container
-resource "azurerm_storage_container" "tfstate" {
-  name                  = "tfstate-container"
-  storage_account_id    = azurerm_storage_account.tfstate.id
-  container_access_type = "private"
+resource "azurerm_cosmosdb_sql_database" "main" {
+  name                = "mydatabase"
+  resource_group_name = azurerm_resource_group.app.name
+  account_name        = azurerm_cosmosdb_account.main.name
 }
