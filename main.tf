@@ -1,4 +1,4 @@
-# main.tf - Simple test configuration
+# main.tf - Fixed with explicit backend configuration
 
 terraform {
   required_providers {
@@ -13,6 +13,9 @@ terraform {
     storage_account_name = "tfstate1620sri"
     container_name       = "tfstate-container"
     key                  = "terraform.tfstate"
+
+    # Important: Use service principal authentication for the backend
+    use_azuread_auth = true
   }
 }
 
@@ -26,7 +29,6 @@ resource "azurerm_resource_group" "test" {
   location = "Central US"
 }
 
-# Output to confirm it worked
 output "resource_group_name" {
   value = azurerm_resource_group.test.name
 }
