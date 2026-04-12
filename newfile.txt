@@ -1,4 +1,5 @@
 Complete Step-by-Step Summary (Today's Fresh Setup)
+----------------------------------------------------------
 1. Created a New Service Principal (App Registration)
 
 Went to Microsoft Entra ID → App registrations → + New registration
