@@ -8,7 +8,6 @@ The ability to create a Client Secret (like a password) or use OIDC (passwordles
 Think of it as creating a service account for your pipeline.
 
 
-
 How to update service principle credentials ?
 ----------------------------------------------------------------------------
 2 - I clicked client & secret and created a new secret 
@@ -25,7 +24,15 @@ Value: 550420cd-a4f2-4642-941d-ec8d931bcceb   ← (the tenant id you shared earl
 Name: AZURE_CLIENT_SECRET
 Value: Paste the new client secret value you just created (the long string starting with ~)
 ----------------------------------------------------------------------------
+4 Important notes 
+Simple Summary:
 
+AZURE_CLIENT_ID → Enter the Client ID (Application ID)
+Example: 4956f32e-04e3-41e6-8094-6604fbb932ad
+AZURE_CLIENT_SECRET → Enter the actual secret value (the long password-like string that starts with ~)
+Example: ~XR8Q~5OPfxWpqjkFzhGdAUz1B.k8IxDDwJ5Ec8_
+The Secret ID (like 2d319738-aa91-47ca-80f3-28a83ba60321) is not used anywhere in GitHub Secrets. You can ignore it or delete the old secret.
+----------------------------------------------------------------------------
 
 
 ......First find out app id by 

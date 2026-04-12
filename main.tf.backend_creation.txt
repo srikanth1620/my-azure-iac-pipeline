@@ -1,4 +1,4 @@
-# main.tf 
+# main.tf - Fresh Backend Creation
 
 terraform {
   required_providers {
@@ -9,7 +9,6 @@ terraform {
   }
 }
 
-# Configure the AzureRM provider
 provider "azurerm" {
   features {}
 }
@@ -17,7 +16,7 @@ provider "azurerm" {
 # 1. Create Resource Group for Terraform state
 resource "azurerm_resource_group" "tfstate" {
   name     = "tfstate-rg"
-  location = "East US 2"     # Change this to your preferred region if needed
+  location = "Central US"
 }
 
 # 2. Create Storage Account for Terraform state
