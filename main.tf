@@ -1,4 +1,4 @@
-# main.tf - Fresh setup with backend and Cosmos DB
+# main.tf - Simple test configuration
 
 terraform {
   required_providers {
@@ -8,7 +8,6 @@ terraform {
     }
   }
 
-  # Backend configuration - using the storage you created today
   backend "azurerm" {
     resource_group_name  = "tfstate-rg"
     storage_account_name = "tfstate1620sri"
@@ -21,37 +20,13 @@ provider "azurerm" {
   features {}
 }
 
-# Resource Group for your application resources
-resource "azurerm_resource_group" "app" {
-  name     = "app-rg"
+# Simple test Resource Group
+resource "azurerm_resource_group" "test" {
+  name     = "test-rg"
   location = "Central US"
 }
 
-# Simple Cosmos DB Account (Serverless - good for development/testing)
-resource "azurerm_cosmosdb_account" "main" {
-  name                = "cosmos-1620sri"
-  location            = azurerm_resource_group.app.location
-  resource_group_name = azurerm_resource_group.app.name
-  offer_type          = "Standard"
-  kind                = "GlobalDocumentDB"
-
-  consistency_policy {
-    consistency_level = "Session"
-  }
-
-  geo_location {
-    location          = azurerm_resource_group.app.location
-    failover_priority = 0
-  }
-
-  capabilities {
-    name = "EnableServerless"
-  }
-}
-
-# Simple SQL Database inside Cosmos DB
-resource "azurerm_cosmosdb_sql_database" "main" {
-  name                = "mydatabase"
-  resource_group_name = azurerm_resource_group.app.name
-  account_name        = azurerm_cosmosdb_account.main.name
+# Output to confirm it worked
+output "resource_group_name" {
+  value = azurerm_resource_group.test.name
 }
