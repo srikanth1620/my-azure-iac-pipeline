@@ -1,4 +1,4 @@
-# main.tf - Clean bootstrap version with provider block
+# main.tf 
 
 terraform {
   required_providers {
