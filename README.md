@@ -30,7 +30,7 @@ Simple Summary:
 AZURE_CLIENT_ID → Enter the Client ID (Application ID)
 Example: 4956f32e-04e3-41e6-8094-6604fbb932ad
 AZURE_CLIENT_SECRET → Enter the actual secret value (the long password-like string that starts with ~)
-Example: ~XR8Q~5OPfxWpqjkFzhGdAUz1B.k8IxDDwJ5Ec8_
+Example: 
 The Secret ID (like 2d319738-aa91-47ca-80f3-28a83ba60321) is not used anywhere in GitHub Secrets. You can ignore it or delete the old secret.
 ----------------------------------------------------------------------------
 
