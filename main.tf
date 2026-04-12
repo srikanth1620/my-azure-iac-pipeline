@@ -1,4 +1,4 @@
-# main.tf 
+# main.tf - Fresh Backend Creation
 
 terraform {
   required_providers {
@@ -7,43 +7,33 @@ terraform {
       version = "~> 4.0"
     }
   }
-
-  backend "azurerm" {
-    resource_group_name  = "tfstate-rg"
-    storage_account_name = "tfstate1620sri"
-    container_name       = "tfstate-container"
-    key                  = "terraform.tfstate"
-  }
 }
 
 provider "azurerm" {
   features {}
 }
 
-# Example resource group for your app
-resource "azurerm_resource_group" "app" {
-  name     = "app-rg"
+# 1. Create Resource Group for Terraform state
+resource "azurerm_resource_group" "tfstate" {
+  name     = "tfstate-rg"
   location = "Central US"
 }
 
-# Example Cosmos DB (simple)
-resource "azurerm_cosmosdb_account" "main" {
-  name                = "cosmos-1620sri"
-  location            = azurerm_resource_group.app.location
-  resource_group_name = azurerm_resource_group.app.name
-  offer_type          = "Standard"
-  kind                = "GlobalDocumentDB"
+# 2. Create Storage Account for Terraform state
+resource "azurerm_storage_account" "tfstate" {
+  name                     = "tfstate1620sri"
+  resource_group_name      = azurerm_resource_group.tfstate.name
+  location                 = azurerm_resource_group.tfstate.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
 
-  consistency_policy {
-    consistency_level = "Session"
-  }
+  min_tls_version                  = "TLS1_2"
+  allow_nested_items_to_be_public  = false
+}
 
-  geo_location {
-    location          = azurerm_resource_group.app.location
-    failover_priority = 0
-  }
-
-  capabilities {
-    name = "EnableServerless"
-  }
+# 3. Create Container for Terraform state
+resource "azurerm_storage_container" "tfstate" {
+  name                  = "tfstate-container"
+  storage_account_id    = azurerm_storage_account.tfstate.id
+  container_access_type = "private"
 }

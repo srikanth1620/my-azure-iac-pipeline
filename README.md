@@ -1,5 +1,32 @@
-How to update service principle credentials ? //
+1. What is "App Registration"?
+An App Registration is Azure’s way of creating an identity for an application or service (in this case, your GitHub Actions pipeline).
+When you create an App Registration, Azure creates two important things:
+
+A Client ID (Application ID) — like a username for the app.
+The ability to create a Client Secret (like a password) or use OIDC (passwordless).
+
+Think of it as creating a service account for your pipeline.
+
+
+
+How to update service principle credentials ?
 ----------------------------------------------------------------------------
+2 - I clicked client & secret and created a new secret 
+once I registered App registration 
+----------------------------------------------------------------------------
+3
+Go to your GitHub repository → Settings → Secrets and variables → Actions
+Create these three secrets:
+
+Name: AZURE_CLIENT_ID
+Value: 4956f32e-04e3-41e6-8094-6604fbb932ad
+Name: AZURE_TENANT_ID
+Value: 550420cd-a4f2-4642-941d-ec8d931bcceb   ← (the tenant id you shared earlier)
+Name: AZURE_CLIENT_SECRET
+Value: Paste the new client secret value you just created (the long string starting with ~)
+----------------------------------------------------------------------------
+
+
 
 ......First find out app id by 
 
