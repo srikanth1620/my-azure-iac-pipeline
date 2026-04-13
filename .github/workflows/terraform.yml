@@ -11,6 +11,7 @@ permissions:
   security-events: write
 
 jobs:
+  # ==================== TRIVY SECURITY SCAN (Isolated Job) ====================
   trivy-scan:
     name: Trivy Security Scan
     runs-on: ubuntu-latest
@@ -19,7 +20,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Debug - Show directory and files
+      - name: Debug - Show current directory and files
         run: |
           pwd
           ls -la
@@ -35,30 +36,14 @@ jobs:
           exit-code: '0'
         continue-on-error: true
 
-      - name: Run Trivy on Terraform Plan (after generating plan)
-        uses: aquasecurity/trivy-action@0.35.0
-        with:
-          scan-type: 'config'
-          scan-ref: 'plan.json'
-          severity: 'HIGH,CRITICAL'
-          format: 'sarif'
-          output: 'trivy-plan-results.sarif'
-          exit-code: '0'
-        continue-on-error: true
-
-      # Upload results
-      - name: Upload Trivy Config Results
+      # Upload results to GitHub Security tab
+      - name: Upload Trivy Results
         if: always() && hashFiles('trivy-config-results.sarif') != ''
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: 'trivy-config-results.sarif'
 
-      - name: Upload Trivy Plan Results
-        if: always() && hashFiles('trivy-plan-results.sarif') != ''
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: 'trivy-plan-results.sarif'
-
+  # ==================== TERRAFORM DEPLOY JOB ====================
   terraform-deploy:
     name: Terraform Apply
     runs-on: ubuntu-latest
@@ -92,9 +77,6 @@ jobs:
 
       - name: Terraform Plan
         run: terraform plan -out=plan.tfplan
-
-      - name: Convert Plan to JSON
-        run: terraform show -json plan.tfplan > plan.json
 
       - name: Terraform Apply
         run: terraform apply -auto-approve plan.tfplan
