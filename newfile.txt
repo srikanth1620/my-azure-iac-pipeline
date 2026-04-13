@@ -1,4 +1,4 @@
-Complete Step-by-Step Summary (Today's Fresh Setup)
+Complete Step-by-Step Summary (Today's Fresh Setup) - please read
 ----------------------------------------------------------
 1. Created a New Service Principal (App Registration)
 
