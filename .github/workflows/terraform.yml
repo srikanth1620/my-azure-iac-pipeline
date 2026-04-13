@@ -15,10 +15,6 @@ jobs:
     name: Terraform Apply
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: .
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -45,6 +41,9 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
+      - name: Debug - List Terraform files
+        run: ls -la *.tf || echo "No .tf files found in root!"
+
       # ==================== TRIVY SCANS ====================
 
       - name: Run Trivy IaC Scan (Config)
@@ -55,7 +54,7 @@ jobs:
           severity: 'HIGH,CRITICAL'
           format: 'sarif'
           output: 'trivy-config-results.sarif'
-          exit-code: '0'          # Changed to 0 so it doesn't block on first try
+          exit-code: '0'
         continue-on-error: true
 
       - name: Terraform Plan
@@ -72,10 +71,10 @@ jobs:
           severity: 'HIGH,CRITICAL'
           format: 'sarif'
           output: 'trivy-plan-results.sarif'
-          exit-code: '0'          # Changed to 0
+          exit-code: '0'
         continue-on-error: true
 
-      # ==================== UPLOAD RESULTS (Only if file exists) ====================
+      # ==================== UPLOAD RESULTS ====================
 
       - name: Upload Trivy Config Results
         if: always() && hashFiles('trivy-config-results.sarif') != ''
