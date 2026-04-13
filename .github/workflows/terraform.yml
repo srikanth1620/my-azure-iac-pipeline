@@ -39,10 +39,10 @@ jobs:
             --tenant ${{ secrets.AZURE_TENANT_ID }}
 
       - name: Terraform Init
-        run: terraform init
+        run: cd . && terraform init
 
       - name: Debug - List Terraform files
-        run: ls -la *.tf || echo "No .tf files found in root!"
+        run: cd . && ls -la *.tf || echo "No .tf files found in root!"
 
       # ==================== TRIVY SCANS ====================
 
@@ -58,10 +58,10 @@ jobs:
         continue-on-error: true
 
       - name: Terraform Plan
-        run: terraform plan -out=plan.tfplan
+        run: cd . && terraform plan -out=plan.tfplan
 
       - name: Convert Plan to JSON
-        run: terraform show -json plan.tfplan > plan.json
+        run: cd . && terraform show -json plan.tfplan > plan.json
 
       - name: Run Trivy on Terraform Plan
         uses: aquasecurity/trivy-action@0.35.0
@@ -90,4 +90,4 @@ jobs:
 
       # ==================== APPLY ====================
       - name: Terraform Apply
-        run: terraform apply -auto-approve plan.tfplan
+        run: cd . && terraform apply -auto-approve plan.tfplan
