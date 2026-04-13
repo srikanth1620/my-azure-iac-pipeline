@@ -38,13 +38,16 @@ jobs:
             -p ${{ secrets.AZURE_CLIENT_SECRET }} \
             --tenant ${{ secrets.AZURE_TENANT_ID }}
 
+      # ==================== DEBUG ====================
+      - name: Debug - Show current directory and files
+        run: |
+          pwd
+          ls -la
+
       - name: Terraform Init
-        run: cd . && terraform init
+        run: terraform init
 
-      - name: Debug - List Terraform files
-        run: cd . && ls -la *.tf || echo "No .tf files found in root!"
-
-      # ==================== TRIVY SCANS ====================
+      # ==================== TRIVY SCANS (Run BEFORE any Terraform change) ====================
 
       - name: Run Trivy IaC Scan (Config)
         uses: aquasecurity/trivy-action@0.35.0
@@ -58,10 +61,10 @@ jobs:
         continue-on-error: true
 
       - name: Terraform Plan
-        run: cd . && terraform plan -out=plan.tfplan
+        run: terraform plan -out=plan.tfplan
 
       - name: Convert Plan to JSON
-        run: cd . && terraform show -json plan.tfplan > plan.json
+        run: terraform show -json plan.tfplan > plan.json
 
       - name: Run Trivy on Terraform Plan
         uses: aquasecurity/trivy-action@0.35.0
@@ -90,4 +93,4 @@ jobs:
 
       # ==================== APPLY ====================
       - name: Terraform Apply
-        run: cd . && terraform apply -auto-approve plan.tfplan
+        run: terraform apply -auto-approve plan.tfplan
