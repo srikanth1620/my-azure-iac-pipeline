@@ -19,6 +19,12 @@ provider "azurerm" {
   features {}
 }
 
+variable "enable_insecure_resources" {
+  description = "Set to true only for Trivy testing"
+  type        = bool
+  default     = false
+}
+
 # Simple test Resource Group
 resource "azurerm_resource_group" "test" {
   name     = "test-rg"
@@ -26,23 +32,27 @@ resource "azurerm_resource_group" "test" {
 }
 
 # ─────────────────────────────────────────────────────────────
-# MISCONFIGURATIONS THAT TRIVY WILL DETECT
+# INSECURE RESOURCES (Only created when enable_insecure_resources = true)
 # ─────────────────────────────────────────────────────────────
 
-# 1. Storage Account with insecure public access settings
+# 1. Insecure Storage Account
 resource "azurerm_storage_account" "insecure" {
+  count = var.enable_insecure_resources ? 1 : 0
+
   name                     = "teststorage1620"
   resource_group_name      = azurerm_resource_group.test.name
   location                 = azurerm_resource_group.test.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
 
-  min_tls_version                  = "TLS1_0"                    # ← Trivy will flag (old TLS)
-  allow_nested_items_to_be_public  = true                        # ← Trivy HIGH (replaced old allow_blob_public_access)
+  min_tls_version                  = "TLS1_0"
+  allow_nested_items_to_be_public  = true
 }
 
-# 2. Network Security Group - Overly permissive (HIGH severity)
+# 2. Insecure Network Security Group
 resource "azurerm_network_security_group" "insecure" {
+  count = var.enable_insecure_resources ? 1 : 0
+
   name                = "test-insecure-nsg"
   location            = azurerm_resource_group.test.location
   resource_group_name = azurerm_resource_group.test.name
@@ -55,23 +65,32 @@ resource "azurerm_network_security_group" "insecure" {
     protocol                   = "*"
     source_port_range          = "*"
     destination_port_range     = "*"
-    source_address_prefix      = "*"      # ← Trivy HIGH
+    source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
 }
 
-# 3. Key Vault - Missing security best practices
+# 3. Insecure Key Vault (Fixed tenant_id)
 resource "azurerm_key_vault" "insecure" {
+  count = var.enable_insecure_resources ? 1 : 0
+
   name                          = "test-insecure-kv"
   location                      = azurerm_resource_group.test.location
   resource_group_name           = azurerm_resource_group.test.name
-  tenant_id                     = "00000000-0000-0000-0000-000000000000"
+  tenant_id                     = data.azurerm_client_config.current.tenant_id   # ← Fixed
   sku_name                      = "standard"
-  purge_protection_enabled      = false      # ← Trivy flags
+  purge_protection_enabled      = false
   soft_delete_retention_days    = 7
-  public_network_access_enabled = true       # ← Trivy flags (should be false)
+  public_network_access_enabled = true
 }
+
+# Get current tenant_id dynamically
+data "azurerm_client_config" "current" {}
 
 output "resource_group_name" {
   value = azurerm_resource_group.test.name
+}
+
+output "insecure_resources_enabled" {
+  value = var.enable_insecure_resources
 }
