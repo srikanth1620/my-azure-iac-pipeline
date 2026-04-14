@@ -19,78 +19,59 @@ provider "azurerm" {
   features {}
 }
 
-variable "enable_insecure_resources" {
-  description = "Set to true only for Trivy testing"
-  type        = bool
-  default     = false
-}
-
-# Simple test Resource Group
 resource "azurerm_resource_group" "test" {
   name     = "test-rg"
   location = "Central US"
 }
 
-# ─────────────────────────────────────────────────────────────
-# INSECURE RESOURCES (Only created when enable_insecure_resources = true)
-# ─────────────────────────────────────────────────────────────
+# ==================== RESOURCES THAT TRIVY WILL FLAG ====================
 
-# 1. Insecure Storage Account
+# 1. Storage Account - Public access + weak TLS (HIGH)
 resource "azurerm_storage_account" "insecure" {
-  count = var.enable_insecure_resources ? 1 : 0
-
   name                     = "teststorage1620"
   resource_group_name      = azurerm_resource_group.test.name
   location                 = azurerm_resource_group.test.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
 
-  min_tls_version                  = "TLS1_0"
-  allow_nested_items_to_be_public  = true
+  min_tls_version                  = "TLS1_0"   # Trivy flags
+  allow_nested_items_to_be_public  = true       # Trivy flags as HIGH
 }
 
-# 2. Insecure Network Security Group
+# 2. NSG - Allow all traffic from internet (Classic HIGH finding)
 resource "azurerm_network_security_group" "insecure" {
-  count = var.enable_insecure_resources ? 1 : 0
-
   name                = "test-insecure-nsg"
   location            = azurerm_resource_group.test.location
   resource_group_name = azurerm_resource_group.test.name
 
   security_rule {
-    name                       = "AllowAllInbound"
+    name                       = "AllowAll"
     priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "*"
     source_port_range          = "*"
     destination_port_range     = "*"
-    source_address_prefix      = "*"
+    source_address_prefix      = "0.0.0.0/0"     # Trivy HIGH
     destination_address_prefix = "*"
   }
 }
 
-# 3. Insecure Key Vault (Fixed tenant_id)
+# 3. Key Vault - No network restriction + no purge protection
 resource "azurerm_key_vault" "insecure" {
-  count = var.enable_insecure_resources ? 1 : 0
-
   name                          = "test-insecure-kv"
   location                      = azurerm_resource_group.test.location
   resource_group_name           = azurerm_resource_group.test.name
-  tenant_id                     = data.azurerm_client_config.current.tenant_id   # ← Fixed
+  tenant_id                     = data.azurerm_client_config.current.tenant_id
   sku_name                      = "standard"
+
   purge_protection_enabled      = false
   soft_delete_retention_days    = 7
-  public_network_access_enabled = true
+  public_network_access_enabled = true          # Trivy flags this
 }
 
-# Get current tenant_id dynamically
 data "azurerm_client_config" "current" {}
 
 output "resource_group_name" {
   value = azurerm_resource_group.test.name
-}
-
-output "insecure_resources_enabled" {
-  value = var.enable_insecure_resources
 }
