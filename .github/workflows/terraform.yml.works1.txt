@@ -1,4 +1,4 @@
-name: Terraform Deploy with Security Scan
+name: Terraform Deploy to Azure
 
 on:
   push:
@@ -11,6 +11,7 @@ permissions:
   security-events: write
 
 jobs:
+  # ==================== TRIVY SECURITY SCAN (Isolated Job) ====================
   trivy-scan:
     name: Trivy Security Scan
     runs-on: ubuntu-latest
@@ -19,27 +20,30 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run Trivy IaC Scan (Terraform)
+      - name: Debug - Show current directory and files
+        run: |
+          pwd
+          ls -la
+
+      - name: Run Trivy IaC Scan (Config)
         uses: aquasecurity/trivy-action@0.35.0
         with:
           scan-type: 'config'
           scan-ref: '.'
           severity: 'HIGH,CRITICAL'
-          format: 'table'           # Changed to table for better visibility in logs
-          output: 'trivy-results.txt'
-          exit-code: '0'            # Don't fail the build on findings (for now)
+          format: 'sarif'
+          output: 'trivy-config-results.sarif'
+          exit-code: '0'
         continue-on-error: true
 
-      - name: Show Trivy Results
-        run: cat trivy-results.txt || echo "No Trivy results file found"
-
-      - name: Upload Trivy Results to GitHub Security
-        if: always()
+      # Upload results to GitHub Security tab
+      - name: Upload Trivy Results
+        if: always() && hashFiles('trivy-config-results.sarif') != ''
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: 'trivy-config-results.sarif'   # Note: you may need to generate SARIF too
-        continue-on-error: true
+          sarif_file: 'trivy-config-results.sarif'
 
+  # ==================== TERRAFORM DEPLOY JOB ====================
   terraform-deploy:
     name: Terraform Apply
     runs-on: ubuntu-latest
