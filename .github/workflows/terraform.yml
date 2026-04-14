@@ -8,7 +8,7 @@ on:
 
 permissions:
   contents: read
-  security-events: write
+  security-events: write   # Required to upload to Security tab
 
 jobs:
   trivy-scan:
@@ -19,25 +19,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run Trivy IaC Scan (Terraform)
+      - name: Run Trivy IaC Scan
         uses: aquasecurity/trivy-action@0.35.0
         with:
           scan-type: 'config'
           scan-ref: '.'
           severity: 'HIGH,CRITICAL'
-          format: 'table'           # Changed to table for better visibility in logs
-          output: 'trivy-results.txt'
-          exit-code: '0'            # Don't fail the build on findings (for now)
-        continue-on-error: true
+          format: 'sarif'                    # Best format for GitHub
+          output: 'trivy-results.sarif'
+          exit-code: '1'                     # Fail build if HIGH/CRITICAL found
+        continue-on-error: false
 
-      - name: Show Trivy Results
-        run: cat trivy-results.txt || echo "No Trivy results file found"
+      - name: Show Trivy Summary in Logs
+        run: |
+          echo "=== Trivy Scan Summary ==="
+          cat trivy-results.sarif | grep -o '"severity":"[^"]*"' | sort | uniq -c || echo "No vulnerabilities found or SARIF parsing issue"
 
       - name: Upload Trivy Results to GitHub Security
-        if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: 'trivy-config-results.sarif'   # Note: you may need to generate SARIF too
+          sarif_file: 'trivy-results.sarif'
         continue-on-error: true
 
   terraform-deploy:
